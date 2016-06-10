@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- JBoss, Home of Professional Open Source Copyright 2013, Red Hat, Inc. 
+	and/or its affiliates, and individual contributors by the @authors tag. See 
+	the copyright.txt in the distribution for a full listing of individual contributors. 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<name>EJB Injected in a JAX-RS using EAR with Security</name>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.redhat.gss</groupId>
+	<artifactId>rs-lookup-security</artifactId>
+	<version>6.4.0.GA</version>
+	<packaging>pom</packaging>
+
+	<url>http://jboss.org/jbossas</url>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+	<modules>
+		<module>rs-lookup-security-ejb</module>
+		<module>rs-lookup-security-web</module>
+		<module>rs-lookup-security-ear</module>
+		<module>rs-lookup-security-war-ejb</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+		<version.jboss.bom.eap>6.4.0.GA</version.jboss.bom.eap>
+		<version.jboss.as>7.3.0.Final-redhat-14</version.jboss.as>
+		<version.ear.plugin>2.8</version.ear.plugin>
+		<version.ejb.plugin>2.3</version.ejb.plugin>
+		<version.surefire.plugin>2.10</version.surefire.plugin>
+		<version.war.plugin>2.1.1</version.war.plugin>
+		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.6</maven.compiler.source>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.redhat.gss</groupId>
+				<artifactId>rs-lookup-security-ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.redhat.gss</groupId>
+				<artifactId>rs-lookup-security-web</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.redhat.gss</groupId>
+				<artifactId>rs-lookup-security-war-ejb</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-tools</artifactId>
+				<version>${version.jboss.bom.eap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+				<version>${version.jboss.bom.eap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- The JBoss AS plugin deploys your ear to a local JBoss EAP container -->
+				<!-- Due to Maven's lack of intelligence with EARs we need to configure 
+					the jboss-as maven plugin to skip deployment for all modules. We then enable 
+					it specifically in the ear module. -->
+				<plugin>
+					<groupId>org.jboss.as.plugins</groupId>
+					<artifactId>jboss-as-maven-plugin</artifactId>
+					<version>${version.jboss.maven.plugin}</version>
+					<inherited>true</inherited>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
